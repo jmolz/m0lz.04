@@ -1,0 +1,69 @@
+{
+  "case": {
+    "number": "25CV000000-910",
+    "court": "Wake County District Court",
+    "state": "North Carolina",
+    "stateShort": "NC",
+    "county": "Wake County",
+    "division": "District Court Division",
+    "courtSystem": "General Court of Justice",
+    "type": "Debt Collection",
+    "amount": "$46,845.49",
+    "dateFiled": "2025-01-10"
+  },
+  "defendant": {
+    "name": "Jane Doe",
+    "nameUpper": "JANE DOE",
+    "status": "Pro Se",
+    "address": "123 Main Street",
+    "city": "Raleigh",
+    "stateCode": "NC",
+    "zip": "27601",
+    "phone": "(919) 555-0100",
+    "email": "JANE.DOE@EXAMPLE.COM"
+  },
+  "plaintiff": {
+    "current": "Acme Bank, N.A.",
+    "original": "Acme Lending Corp. as Attorney-in-Fact for Example Investment Corp.",
+    "accountOwner": "Example Investment Corp."
+  },
+  "opposingCounsel": {
+    "firm": "Smith & Associates, P.C.",
+    "address": "P.O. Box 100000, Charlotte, NC 28200",
+    "attorneys": [
+      { "name": "John Smith, Esq.", "email": "jsmith@smithlaw.com" },
+      { "name": "Sarah Johnson, Esq.", "email": "sjohnson@smithlaw.com" }
+    ],
+    "serviceEmails": [
+      "litigation@smithlaw.com",
+      "jsmith@smithlaw.com",
+      "sjohnson@smithlaw.com"
+    ]
+  },
+  "portal": {
+    "roaUrl": "",
+    "portalType": "tyler-tech"
+  },
+  "defense": {
+    "arguments": [
+      { "label": "Standing", "summary": "Original plaintiff lacked litigation authority" },
+      { "label": "Improper Division", "summary": "Amount exceeds District Court jurisdictional limit" },
+      { "label": "Substitution Invalid", "summary": "Court lacked jurisdiction over void complaint" }
+    ],
+    "jurisdictionalReservation": "Defendant files this [document type] without waiving, and expressly preserving, all previously raised objections to this Court's subject matter jurisdiction, including but not limited to: (1) [first objection]; (2) [second objection]; and (3) [third objection].",
+    "keyCases": [
+      { "name": "Intrepid v. Amerex", "holding": "Complaint is nullity when filer lacked standing" }
+    ]
+  },
+  "assignmentChain": [
+    { "entity": "Original Lender (Unknown)", "role": "Original creditor", "date": "Unknown", "document": "Loan agreement not produced", "status": "gap", "notes": "No loan agreement produced." },
+    { "entity": "Example Investment Corp.", "role": "Account owner / Assignee", "date": "Unknown", "document": "Assignment not produced", "status": "gap", "notes": "No assignment document in the record." },
+    { "entity": "Acme Lending Corp.", "role": "Attorney-in-Fact", "date": "2025-01-15", "document": "Power of Attorney (referenced in complaint)", "status": "challenged", "notes": "POA scope disputed." },
+    { "entity": "Acme Lending Corp. (as AIF)", "role": "Original plaintiff — filed complaint", "date": "2025-01-15", "document": "Original Complaint", "status": "void", "notes": "Filed without litigation authority." },
+    { "entity": "Acme Bank, N.A.", "role": "Substituted plaintiff", "date": "2025 (post-filing)", "document": "Order granting substitution", "status": "challenged", "notes": "Substitution on void complaint challenged." }
+  ],
+  "ui": {
+    "title": "Case Pilot",
+    "subtitle": ""
+  }
+}

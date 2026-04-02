@@ -1,0 +1,20 @@
+{
+  "name": "case-pilot",
+  "version": "1.0.0",
+  "description": "AI-powered legal case management for pro se litigants",
+  "main": "ui-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ui": "node ui-server.js",
+    "sync:research-status": "node sync-research-status.js",
+    "sync:research-status:watch": "node sync-research-status.js --watch"
+  },
+  "keywords": ["legal", "case-management", "pro-se", "litigation"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "docx": "^9.6.0",
+    "playwright": "^1.58.2"
+  }
+}

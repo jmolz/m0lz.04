@@ -1,0 +1,58 @@
+# ── Case-specific data (user-created, never committed) ──────────────────────
+case-config.json
+case-tracker.db
+case-tracker.db-journal
+case-tracker.db-wal
+
+# Case document folders (populated per-case; .gitkeep preserves directory structure)
+00_Case_Overview/*.md
+!00_Case_Overview/README.md
+01_Pleadings/*
+!01_Pleadings/.gitkeep
+02_Motions/*
+!02_Motions/.gitkeep
+03_Discovery/*
+!03_Discovery/.gitkeep
+04_Evidence_Exhibits/*
+!04_Evidence_Exhibits/.gitkeep
+05_Court_Orders/*
+!05_Court_Orders/.gitkeep
+06_Correspondence/*
+!06_Correspondence/.gitkeep
+07_Research/*
+!07_Research/.gitkeep
+!07_Research/README.example.md
+09_Oral_Arguments/*
+!09_Oral_Arguments/.gitkeep
+10_Arbitration/*
+!10_Arbitration/.gitkeep
+_Inbox/*
+!_Inbox/.gitkeep
+
+# ── Runtime state & logs ────────────────────────────────────────────────────
+scripts/ui-state/
+scripts/state/
+scripts/logs/
+
+# ── Secrets ─────────────────────────────────────────────────────────────────
+.env
+scripts/.env
+
+# ── Dependencies ────────────────────────────────────────────────────────────
+scripts/node_modules/
+scripts/package-lock.json
+node_modules/
+
+# ── Windsurf rules (case-specific PII) ──────────────────────────────────────
+.windsurf/rules/*.md
+!.windsurf/rules/README.md
+
+# ── OS / IDE ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+.remember/

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Case Pilot</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__title">Case Pilot</span>
+          <span class="brand__sub" id="activeConversationLabel">Local-only</span>
+        </div>
+        <div class="topbar__controls">
+          <button id="refreshBtn" class="btn btn--ghost">Refresh</button>
+        </div>
+      </header>
+
+      <main class="layout" id="layoutRoot">
+        <!-- Left: Conversations + Drafts -->
+        <aside class="panel panel--left" aria-label="Workspace">
+          <div class="panel__header">
+            <div>
+              <div class="panel__title">Workspace</div>
+              <div class="panel__meta" id="workspaceMeta"></div>
+            </div>
+            <button id="newConversationBtn" class="btn btn--primary">New</button>
+          </div>
+          <div class="panel__resizer--left" id="leftResizer" role="separator" aria-label="Resize workspace panel" tabindex="0"></div>
+          <div class="leftstack">
+            <div class="section" data-section="deadlines">
+              <div class="section__header section__toggle" role="button" tabindex="0" aria-expanded="true">
+                <div class="section__title">Deadlines</div>
+                <span class="section__chevron">&#9660;</span>
+              </div>
+              <div class="section__body dl" id="deadlinesContainer"></div>
+            </div>
+
+            <div class="section" data-section="conversations">
+              <div class="section__header section__toggle" role="button" tabindex="0" aria-expanded="true">
+                <div class="section__title">Conversations</div>
+                <span class="section__chevron">&#9660;</span>
+              </div>
+              <div class="section__body list list--tight" id="conversationsList"></div>
+            </div>
+
+            <div class="section" data-section="drafts">
+              <div class="section__header section__toggle" role="button" tabindex="0" aria-expanded="true">
+                <div class="section__title">Drafts</div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <label class="check">
+                    <input type="checkbox" id="allDraftsCheck" />
+                    <span>All</span>
+                  </label>
+                  <span class="section__chevron">&#9660;</span>
+                </div>
+              </div>
+              <div class="section__body">
+                <div class="panel__meta" id="draftsMeta"></div>
+                <div id="draftsList" class="list"></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Center: Chat / Search / Case -->
+        <section class="center">
+          <div class="tabs">
+            <button class="tab tab--active" data-tab="chat">Chat</button>
+            <button class="tab" data-tab="search">Search</button>
+            <button class="tab" data-tab="case">Case</button>
+            <button class="tab" data-tab="intel">Intel</button>
+            <button class="tab" data-tab="tools">Ops</button>
+          </div>
+
+          <div class="tabpane tabpane--active" id="tab-chat">
+            <div id="messages" class="messages"></div>
+            <form id="composer" class="composer">
+              <div class="panel__meta" id="composerMeta"></div>
+              <div class="panel__meta wfq__meta" id="workflowQuickMeta"></div>
+              <div id="attachmentChips" class="att-chips"></div>
+              <textarea id="messageInput" class="textarea" placeholder="'Draft Answer to Amended Complaint…' or 'Revise paragraph 3 to…'" rows="3"></textarea>
+              <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.md,.csv,.doc,.docx" hidden />
+              <div id="slashCommandMenu" class="slash-menu is-hidden" role="listbox" aria-label="Workflow slash commands"></div>
+              <div class="composer__actions">
+                <button type="button" id="attachBtn" class="btn btn--ghost btn--attach" title="Attach files">&#128206; Attach</button>
+                <button type="submit" class="btn btn--primary">Send</button>
+                <button type="button" id="clearChatBtn" class="btn btn--ghost">Clear</button>
+              </div>
+              <div id="dropOverlay" class="drop-overlay is-hidden">Drop files here</div>
+            </form>
+          </div>
+
+          <div class="tabpane" id="tab-search">
+            <div class="search">
+              <div class="search__row">
+                <input id="searchInput" class="input" placeholder="Search all case files — motions, orders, pleadings, research…" />
+                <button id="searchBtn" class="btn btn--primary">Search</button>
+                <button id="searchClearBtn" class="btn btn--ghost is-hidden">Clear</button>
+              </div>
+              <div id="searchMeta" class="panel__meta"></div>
+              <div id="searchResults" class="results">
+                <div class="onboard">
+                  <div class="onboard__title">Search</div>
+                  <p>Searches across <strong>all case folders</strong>: pleadings, motions, court orders, evidence, research memos, correspondence, and case overview docs. PDFs are searched by filename and extracted text.</p>
+                  <p>Results are <strong>ranked by relevance</strong> — the most on-point documents appear first.</p>
+                  <p>Type a keyword or phrase above and hit <kbd>Search</kbd> or press <kbd>Enter</kbd>.</p>
+                  <p class="onboard__examples"><strong>Try:</strong> "standing", "Rule 17", "substitution", "summary judgment", "Intrepid", "POA"</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabpane" id="tab-case">
+            <div class="case case--twocol">
+              <div class="case__col case__col--left">
+                <div id="caseSummary" class="cs"></div>
+              </div>
+              <div class="case__col case__col--right">
+                <div id="nextMovesContainer" class="nm"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabpane" id="tab-tools">
+            <div class="tools">
+              <div class="tools__guide">
+                <div class="tools__guide-title">How to use this page</div>
+                <p class="tools__guide-copy">
+                  Use <strong>Chat + workflow quick actions</strong> for normal drafting. This page is for
+                  <strong>advanced checks and monitoring</strong> when you need to validate, diagnose, or force-refresh.
+                </p>
+                <div class="tools__guide-actions">
+                  <button id="toolsGuideToChatBtn" class="btn btn--primary btn--sm">Back to Chat Workflow</button>
+                  <button id="toolsGuideVerifyBtn" class="btn btn--ghost btn--sm">Run Citation Audit</button>
+                  <button id="toolsGuideRefreshMonitorsBtn" class="btn btn--ghost btn--sm">Refresh All Monitors</button>
+                </div>
+                <ul class="tools__guide-list">
+                  <li><strong>Top row:</strong> one-off utilities (citations, deadlines, case law search, hearing prep).</li>
+                  <li><strong>Lower cards:</strong> ongoing monitors (assignment chain, patterns, discovery, reactor, alerts).</li>
+                  <li><strong>Rule of thumb:</strong> use this tab when you need certainty checks; use Chat when you need output.</li>
+                </ul>
+              </div>
+              <div class="tools__grid">
+
+                <!-- Citation Verification -->
+                <div class="tools__card">
+                  <div class="tools__card-title">Citation Verification</div>
+                  <p class="tools__card-desc">Verify all case and statute citations in the active draft against CourtListener and local research library.</p>
+                  <button id="verifyCitationsBtn" class="btn btn--primary btn--sm">Verify Active Draft</button>
+                  <div id="citationResults" class="tools__result"></div>
+                </div>
+
+                <!-- Service Date Calculator -->
+                <div class="tools__card">
+                  <div class="tools__card-title">Service Date Calculator</div>
+                  <div class="tools__form">
+                    <label class="field"><span>Trigger Date</span><input id="svcTriggerDate" class="input" type="date" /></label>
+                    <label class="field"><span>Days</span><input id="svcDays" class="input" type="number" value="30" min="0" /></label>
+                    <label class="check"><input type="checkbox" id="svcMailService" /><span>+3 mail (Rule 6(e))</span></label>
+                    <label class="check"><input type="checkbox" id="svcBusinessDays" /><span>Business days only</span></label>
+                    <button id="calcDeadlineBtn" class="btn btn--primary btn--sm">Calculate</button>
+                  </div>
+                  <div class="tools__presets">
+                    <span class="tools__presets-label">Quick:</span>
+                    <button class="btn btn--ghost btn--xs" data-svc-days="30" data-svc-label="Answer (30d)">Answer</button>
+                    <button class="btn btn--ghost btn--xs" data-svc-days="21" data-svc-label="Response (21d)">Response</button>
+                    <button class="btn btn--ghost btn--xs" data-svc-days="14" data-svc-label="Reply (14d)">Reply</button>
+                    <button class="btn btn--ghost btn--xs" data-svc-days="30" data-svc-label="Discovery (30d)">Discovery</button>
+                    <button class="btn btn--ghost btn--xs" data-svc-days="10" data-svc-label="Objections (10d)">Objections</button>
+                  </div>
+                  <div id="svcCalcResult" class="tools__result"></div>
+                </div>
+
+                <!-- CourtListener Search -->
+                <div class="tools__card">
+                  <div class="tools__card-title">Case Law Search</div>
+                  <div class="tools__form tools__form--row">
+                    <input id="clSearchInput" class="input" placeholder="e.g. debt buyer standing assignment" />
+                    <button id="clSearchBtn" class="btn btn--primary btn--sm">Search</button>
+                  </div>
+                  <div id="clSearchResults" class="tools__result tools__result--scroll"></div>
+                </div>
+
+                <!-- Hearing Prep -->
+                <div class="tools__card">
+                  <div class="tools__card-title">Hearing Prep Generator</div>
+                  <div class="tools__form">
+                    <label class="field"><span>Hearing Description</span><input id="hpDescription" class="input" placeholder="e.g. Motion to Dismiss hearing" /></label>
+                    <label class="field"><span>Hearing Date</span><input id="hpDate" class="input" type="date" /></label>
+                    <button id="hpGenerateBtn" class="btn btn--primary btn--sm">Generate Prep</button>
+                  </div>
+                  <div id="hpResult" class="tools__result tools__result--scroll"></div>
+                </div>
+
+                <!-- Chain of Assignment -->
+                <div class="tools__card tools__card--wide">
+                  <div class="tools__card-header"><div class="tools__card-title">Chain of Assignment</div><span id="chainStale" class="tools__stale"></span><button id="loadChainBtn" class="btn btn--ghost btn--xs" title="Force refresh">&#x21bb;</button></div>
+                  <div id="chainResult" class="tools__result"><div class="tools__placeholder">Loads automatically</div></div>
+                </div>
+
+                <!-- Plaintiff Pattern Predictor -->
+                <div class="tools__card tools__card--wide">
+                  <div class="tools__card-header"><div class="tools__card-title">Plaintiff Pattern Predictor</div><span id="patternsStale" class="tools__stale"></span><button id="loadPatternsBtn" class="btn btn--ghost btn--xs" title="Force refresh">&#x21bb;</button></div>
+                  <div id="patternsResult" class="tools__result"><div class="tools__placeholder">Loads automatically</div></div>
+                </div>
+
+                <!-- Discovery Compliance -->
+                <div class="tools__card tools__card--wide">
+                  <div class="tools__card-header"><div class="tools__card-title">Discovery Compliance</div><span id="discoveryStale" class="tools__stale"></span><button id="loadDiscoveryBtn" class="btn btn--ghost btn--xs" title="Force refresh">&#x21bb;</button></div>
+                  <div id="discoveryResult" class="tools__result"><div class="tools__placeholder">Loads automatically</div></div>
+                </div>
+
+                <!-- Filing Response Reactor -->
+                <div class="tools__card">
+                  <div class="tools__card-header"><div class="tools__card-title">Filing Response Reactor</div><span id="reactorStale" class="tools__stale"></span><button id="loadReactorBtn" class="btn btn--ghost btn--xs" title="Force refresh">&#x21bb;</button></div>
+                  <p class="tools__card-desc">Detect recent plaintiff filings and generate response skeletons with deadlines.</p>
+                  <div id="reactorResult" class="tools__result"><div class="tools__placeholder">Loads automatically</div></div>
+                </div>
+
+                <!-- Alerts -->
+                <div class="tools__card">
+                  <div class="tools__card-header"><div class="tools__card-title">Alerts</div><span id="alertsStale" class="tools__stale"></span><button id="loadAlertsBtn" class="btn btn--ghost btn--xs" title="Force refresh">&#x21bb;</button></div>
+                  <div id="alertsResult" class="tools__result"><div class="tools__placeholder">Loads automatically</div></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="tabpane" id="tab-intel">
+            <div class="intel">
+              <div class="intel__row">
+                <div class="panel__meta" id="intelMeta"></div>
+              </div>
+              <div id="intelDashboard" class="intel__dashboard"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Draft Editor -->
+        <aside class="panel panel--editor" id="draftEditorPanel" aria-label="Draft Editor">
+          <div class="panel__resizer" id="editorResizer" role="separator" aria-label="Resize draft editor" aria-orientation="vertical" tabindex="0"></div>
+          <div class="panel__header">
+            <div>
+              <div class="panel__title">Draft Editor</div>
+              <div class="panel__meta" id="activeDraftMeta">No draft selected</div>
+            </div>
+          </div>
+          <div class="editor">
+            <div class="panel__meta" id="draftSuggestedMeta"></div>
+            <div class="editor__toolbar">
+              <div class="editor__view-toggle">
+                <button id="editorEditViewBtn" class="btn btn--active" type="button">Edit</button>
+                <button id="editorPreviewViewBtn" class="btn" type="button">Preview</button>
+              </div>
+              <div id="jesusWeptMeter" class="jw"></div>
+              <div id="versionHistory" class="vh"></div>
+            </div>
+            <textarea id="draftContent" class="textarea" placeholder="Select a draft, or create one from an assistant message…" rows="10"></textarea>
+            <div id="draftPreview" class="draft-preview prose is-hidden"></div>
+
+            <div id="completenessChecklist" class="ck"></div>
+
+            <div class="editor__actions">
+              <button id="saveDraftBtn" class="btn btn--primary" disabled>Save</button>
+              <button id="toggleAdvancedBtn" class="btn btn--ghost" disabled>Advanced</button>
+              <button id="redTeamBtn" class="btn btn--danger" type="button">Red Team</button>
+              <button id="downloadDraftBtn" class="btn btn--ghost" type="button">Download DOCX</button>
+            </div>
+
+            <div id="redTeamResult" class="rt"></div>
+
+            <div class="savebox is-hidden" id="advancedSaveBox">
+              <div class="savebox__title">Override save metadata (optional)</div>
+              <div class="grid">
+                <label class="field">
+                  <span>Date</span>
+                  <input id="optDate" class="input" placeholder="YYYY-MM-DD" />
+                </label>
+                <label class="field">
+                  <span>IDX #</span>
+                  <input id="optIdx" class="input" placeholder="e.g. 101" />
+                </label>
+                <label class="field">
+                  <span>DocType</span>
+                  <select id="optDocType" class="select">
+                    <option value="MOT">MOT</option>
+                    <option value="RESP">RESP</option>
+                    <option value="REPLY">REPLY</option>
+                    <option value="ANS">ANS</option>
+                    <option value="COMP">COMP</option>
+                    <option value="MEMO">MEMO</option>
+                    <option value="BRIEF">BRIEF</option>
+                    <option value="AFF">AFF</option>
+                    <option value="EX">EX</option>
+                    <option value="NOT">NOT</option>
+                    <option value="NOH">NOH</option>
+                    <option value="COS">COS</option>
+                    <option value="ORD">ORD</option>
+                    <option value="ORAL">ORAL</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Party</span>
+                  <select id="optParty" class="select">
+                    <option value="DEF">DEF</option>
+                    <option value="PLT">PLT</option>
+                    <option value="CRT">CRT</option>
+                  </select>
+                </label>
+              </div>
+              <label class="field">
+                <span>Description (2-5 words)</span>
+                <input id="optDesc" class="input" placeholder="e.g., Answer-to-Amended-Complaint" />
+              </label>
+            </div>
+
+            <div class="panel__meta" id="saveStatus"></div>
+          </div>
+        </aside>
+      </main>
+
+      <div class="statusbar">
+        <span class="statusbar__dot" id="statusDot"></span>
+        <span id="statusText">localhost:3210</span>
+      </div>
+
+      <div id="toastContainer" class="toast-container"></div>
+
+      <div id="modalOverlay" class="modal-overlay is-hidden">
+        <div class="modal">
+          <div class="modal__title" id="modalTitle"></div>
+          <div class="modal__body" id="modalBody"></div>
+          <div class="modal__actions" id="modalActions"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
