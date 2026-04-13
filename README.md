@@ -5,20 +5,19 @@
 <h1 align="center">m0lz.04</h1>
 
 <p align="center">
-  <strong>Case Pilot</strong> — AI-powered legal case management for pro se litigants<br>
+  AI-powered legal case management for pro se litigants<br>
   Court filing monitor, deadline tracker, citation verification, red team analysis<br>
   <a href="https://m0lz.dev/writing/case-pilot">m0lz.dev/writing/case-pilot</a>
 </p>
 
 ---
 
-# Case Pilot
 
 AI-powered legal case management for pro se litigants. Built for North Carolina District Court but adaptable to any jurisdiction.
 
 ## What It Does
 
-Case Pilot is a local-first, privacy-focused tool that helps self-represented parties manage their litigation. It runs entirely on your machine — no cloud, no third-party access to your case files.
+m0lz.04 is a local-first, privacy-focused tool that helps self-represented parties manage their litigation. It runs entirely on your machine — no cloud, no third-party access to your case files.
 
 **Core Features:**
 - **AI Drafting** — Claude-powered motion/response drafting with full case context (RAG over your local documents)
