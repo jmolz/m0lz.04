@@ -38,7 +38,7 @@ Case Pilot is a local-first, privacy-focused tool that helps self-represented pa
 
 ```bash
 git clone https://github.com/jmolz/m0lz.04.git
-cd case-pilot
+cd m0lz.04
 cd scripts && npm install
 ```
 
@@ -68,7 +68,7 @@ Open http://127.0.0.1:3210 in your browser.
 ## Project Structure
 
 ```
-case-pilot/
+m0lz.04/
 ├── case-config.example.json   # Template — copy to case-config.json
 ├── .env.example               # Template — copy to .env
 ├── 00_Case_Overview/          # Your case index, timeline, strategy notes
