@@ -1,3 +1,17 @@
+<p align="center">
+  <img src="branch-mark.svg" width="48" height="48" alt="m0lz.04 branch mark — case-pilot variant">
+</p>
+
+<h1 align="center">m0lz.04</h1>
+
+<p align="center">
+  <strong>Case Pilot</strong> — AI-powered legal case management for pro se litigants<br>
+  Court filing monitor, deadline tracker, citation verification, red team analysis<br>
+  <a href="https://m0lz.dev/writing/case-pilot">m0lz.dev/writing/case-pilot</a>
+</p>
+
+---
+
 # Case Pilot
 
 AI-powered legal case management for pro se litigants. Built for North Carolina District Court but adaptable to any jurisdiction.
@@ -23,7 +37,7 @@ Case Pilot is a local-first, privacy-focused tool that helps self-represented pa
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/case-pilot.git
+git clone https://github.com/jmolz/m0lz.04.git
 cd case-pilot
 cd scripts && npm install
 ```
