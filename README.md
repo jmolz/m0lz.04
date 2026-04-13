@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="branch-mark.svg" width="48" height="48" alt="m0lz.04 branch mark — case-pilot variant">
+  <img src="branch-mark.svg" width="48" height="48" alt="m0lz.04 branch mark">
 </p>
 
 <h1 align="center">m0lz.04</h1>
@@ -7,7 +7,7 @@
 <p align="center">
   AI-powered legal case management for pro se litigants<br>
   Court filing monitor, deadline tracker, citation verification, red team analysis<br>
-  <a href="https://m0lz.dev/writing/case-pilot">m0lz.dev/writing/case-pilot</a>
+  <a href="https://m0lz.dev">m0lz.dev</a>
 </p>
 
 ---
